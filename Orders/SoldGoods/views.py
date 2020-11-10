@@ -1,11 +1,13 @@
 from django.db.models import Sum, F, DecimalField, Count
-from django.http import HttpResponse
 from django.views import View
 
 from SoldGoods.models import Order, OrderItem
 
+from SoldGoods.utils import get_query_count
+
 
 class OrdersByPeriodView(View):
+    @get_query_count
     def get(self, request):
         max_date = request.GET.get('max_date', '9999-12-31')
         min_date = request.GET.get('min_date', '2018-01-01')
@@ -28,10 +30,11 @@ class OrdersByPeriodView(View):
                 'goods': order_items,
             })
 
-        return HttpResponse(result)
+        return result
 
 
 class MostPurchasedView(View):
+    @get_query_count
     def get(self, request):
         max_date = request.GET.get('max_date', '9999-12-31')
         min_date = request.GET.get('min_date', '2018-01-01')
@@ -51,4 +54,4 @@ class MostPurchasedView(View):
                     .order_by('-order__created_date'))
             result.append({'product_name': item['product_name'], 'orders': item_orders})
 
-        return HttpResponse(result)
+        return result

@@ -1,12 +1,16 @@
+from datetime import datetime
+
 from django.db.models import Sum, F, DecimalField, Count
-from django.views import View
 
 from SoldGoods.models import Order, OrderItem
 
 from SoldGoods.utils import get_query_count
+from django.views.generic import TemplateView
 
 
-class OrdersByPeriodView(View):
+class OrdersByPeriodView(TemplateView):
+    template_name = 'orders_by_period.html'
+
     @get_query_count
     def get(self, request):
         max_date = request.GET.get('max_date', '9999-12-31')
@@ -30,10 +34,12 @@ class OrdersByPeriodView(View):
                 'goods': order_items,
             })
 
-        return result
+        return request, self.template_name, result
 
 
-class MostPurchasedView(View):
+class MostPurchasedView(TemplateView):
+    template_name = 'most_purchased.html'
+
     @get_query_count
     def get(self, request):
         max_date = request.GET.get('max_date', '9999-12-31')
@@ -54,4 +60,4 @@ class MostPurchasedView(View):
                     .order_by('-order__created_date'))
             result.append({'product_name': item['product_name'], 'orders': item_orders})
 
-        return result
+        return request, self.template_name, result

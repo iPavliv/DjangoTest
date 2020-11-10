@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: center;
+          padding: 8px;
+        }
+    </style>
+    <title>Orders by period</title>
+</head>
+<body>
+    <div>
+        <div><h4>Number of queries to db: {{query_number}}</h4></div>
+        <div>set time and button</div>
+        <div>
+            <table>
+                <tr>
+                    <th>Order Date</th>
+                    <th>Order Number</th>
+                    <th>Total Price</th>
+                    <th>Product Name x Amount</th>
+                </tr>
+                {% for item in data %}
+                    <tr>
+                        <th>{{item.created_date}}</th>
+                        <th>{{item.number}}</th>
+                        <th>{{item.total_price}}</th>
+                        <th>
+                            <ul>
+                                {% for i in item.goods %}
+                                    <li>{{i.product_name}} x {{i.amount}}</li>
+                                {% endfor %}
+                            </ul>
+                        </th>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

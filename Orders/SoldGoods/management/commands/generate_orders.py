@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError
 
-from Orders.SoldGoods.models import Order, OrderItem
+from SoldGoods.models import Order, OrderItem
 
 START_DATE = datetime(2018, 1, 1, 9, 0, 0)
 
@@ -40,4 +40,4 @@ class Command(BaseCommand):
                 except IntegrityError:
                     raise CommandError('Failed to create new order item.')
 
-            self.stdout.write(self.style.SUCCESS('Successfully created %i orders.' % orders_number))
+        self.stdout.write(self.style.SUCCESS('Successfully created %i orders.' % orders_number))

@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
+
+from SoldGoods.views import OrdersByPeriodView, MostPurchasedView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('orders-by-period/', OrdersByPeriodView.as_view()),
+    path('most-purchased/', MostPurchasedView.as_view()),
+    # path('most-purchased/', TemplateView.as_view(template_name="secret.html")),
 ]

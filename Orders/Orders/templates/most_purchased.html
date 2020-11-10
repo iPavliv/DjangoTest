@@ -19,7 +19,19 @@
 <body>
     <div>
         <div><h4>Number of queries to db: {{query_number}}</h4></div>
-        <div>set time and button</div>
+        <div>
+            <form action="/most-purchased/" method="POST" style="width:100%">
+
+                {% csrf_token %}
+                <label for="min_date">Start date</label>
+                <input type="date" name="min_date">
+                <label for="max_date">End date</label>
+                <input type="date" name="max_date">
+                <button type="submit">Get records</button>
+
+            </form>
+            <br>
+        </div>
         <div>
             <table>
                 <tr>

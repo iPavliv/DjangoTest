@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.db.models import Sum, F, DecimalField, Count
 
 from SoldGoods.models import Order, OrderItem
@@ -13,11 +11,15 @@ class OrdersByPeriodView(TemplateView):
 
     @get_query_count
     def get(self, request):
-        max_date = request.GET.get('max_date', '9999-12-31')
-        min_date = request.GET.get('min_date', '2018-01-01')
+        return request, self.template_name, []
+
+    @get_query_count
+    def post(self, request):
+        max_date = request.POST.get('max_date') or '9999-12-31'
+        min_date = request.POST.get('min_date') or '2018-01-01'
         orders_by_time = list(
             Order.objects.filter(created_date__lte=max_date).filter(created_date__gte=min_date)
-            .order_by('-created_date'))
+                .order_by('-created_date'))
         result = []
 
         for order in orders_by_time:
@@ -42,14 +44,18 @@ class MostPurchasedView(TemplateView):
 
     @get_query_count
     def get(self, request):
-        max_date = request.GET.get('max_date', '9999-12-31')
-        min_date = request.GET.get('min_date', '2018-01-01')
+        return request, self.template_name, []
+
+    @get_query_count
+    def post(self, request):
+        max_date = request.POST.get('max_date') or '9999-12-31'
+        min_date = request.POST.get('min_date') or '2018-01-01'
 
         order_items = list(OrderItem.objects
-            .filter(order__created_date__lte=max_date).filter(order__created_date__gte=min_date)
-            .values('product_name')
-            .annotate(most_purchased=Count(F('product_name')))
-            .order_by('-most_purchased'))[:20]
+                           .filter(order__created_date__lte=max_date).filter(order__created_date__gte=min_date)
+                           .values('product_name')
+                           .annotate(most_purchased=Count(F('product_name')))
+                           .order_by('-most_purchased')[:20])
         result = []
 
         for item in order_items:
